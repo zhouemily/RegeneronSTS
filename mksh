@@ -1,0 +1,6 @@
+
+set -x
+DATE=`date "+%Y%m%d"`
+DATE_WITH_TIME=`date "+%Y%m%d%H%M%S"`
+echo $DATE_WITH_TIME
+mv png.tar ../$DATE_WITH_TIME_png.tar
