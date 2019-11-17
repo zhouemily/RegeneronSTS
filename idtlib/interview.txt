@@ -1,0 +1,181 @@
+LINUX BOOT PROCESS & INTERVIEW QUESTIONS.
+==============================================================
+Interview questions on booting process: 1.) Explain booting process ? 2) How do you recover grub ? 3) How to crack grub password ? 4) I want to run one prog which is not part of kernel default file; where i can edit it? 5) Default location of grub file and contents of it.
+
+Boot Process:
+BIOS -> MBR -> Grub -> Kernel -> Init (it process, /etc/inittab -> starts /etc/rc.sysinit and /etc/rcX.d ).
+
+1. BIOS
+BIOS stands for Basic Input/Output System
+Performs some system integrity checks
+Searches, loads, and executes the boot loader program.
+It looks for boot loader in floppy, cd-rom, or hard drive. You can press a key (typically F12 of F2, but it depends on your system) during the BIOS startup to change the boot sequence.
+Once the boot loader program is detected and loaded into the memory, BIOS gives the control to it.
+So, in simple terms BIOS loads and executes the MBR boot loader.
+2. MBR
+MBR stands for Master Boot Record.
+It is located in the 1st sector of the bootable disk. Typically /dev/hda, or /dev/sda
+MBR is less than 512 bytes in size. This has three components 1) primary boot loader info in 1st 446 bytes 2) partition table info in next 64 bytes 3) mbr validation check in last 2 bytes.
+It contains information about GRUB (or LILO in old systems).
+So, in simple terms MBR loads and executes the GRUB boot loader.
+3. GRUB
+GRUB stands for Grand Unified Bootloader.
+If you have multiple kernel images installed on your system, you can choose which one to be executed.
+GRUB displays a splash screen, waits for few seconds, if you don’t enter anything, it loads the default kernel image as specified in the grub configuration file.
+GRUB has the knowledge of the filesystem (the older Linux loader LILO didn’t understand filesystem).
+Grub configuration file is /boot/grub/grub.conf (/etc/grub.conf is a link to this). 
+
+4. Kernel
+Mounts the root file system as specified in the “root=” in grub.conf
+Kernel executes the /sbin/init program
+Since init was the 1st program to be executed by Linux Kernel, it has the process id (PID) of 1. Do a ‘ps -ef | grep init’ and check the pid.
+initrd stands for Initial RAM Disk.
+initrd is used by kernel as temporary root file system until kernel is booted and the real root file system is mounted. It also contains necessary drivers compiled inside, which helps it to access the hard drive partitions, and other hardware.
+5. Init
+Looks at the /etc/inittab file to decide the Linux run level.
+Following are the available run levels
+0 – halt
+1 – Single user mode
+2 – Multiuser, without NFS
+3 – Full multiuser mode
+4 – unused
+5 – X11
+6 – reboot
+Init identifies the default initlevel from /etc/inittab and uses that to load all appropriate program.
+Execute ‘grep initdefault /etc/inittab’ on your system to identify the default run level
+If you want to get into trouble, you can set the default run level to 0 or 6. Since you know what 0 and 6 means, probably you might not do that.
+Typically you would set the default run level to either 3 or 5.
+
+6. Runlevel programs
+When the Linux system is booting up, you might see various services getting started. For example, it might say “starting sendmail …. OK”. Those are the runlevel programs, executed from the run level directory as defined by your run level.
+Depending on your default init level setting, the system will execute the programs from one of the following directories.
+Run level 0 – /etc/rc.d/rc0.d/
+Run level 1 – /etc/rc.d/rc1.d/
+Run level 2 – /etc/rc.d/rc2.d/
+Run level 3 – /etc/rc.d/rc3.d/
+Run level 4 – /etc/rc.d/rc4.d/
+Run level 5 – /etc/rc.d/rc5.d/
+Run level 6 – /etc/rc.d/rc6.d/
+===============================================
+
+
+
+C programming Questions
+===============================
+1. What are different storage class specifiers in C?
+Ans: auto, register, static, extern
+
+2.C program to sort an array using pointers
+Given an array of size n, the task is to sort this array using pointers in C.
+Examples:
+Input: n = 5, arr[] = {0, 23, 14, 12, 9}
+Output: {0, 9, 12, 14, 23}
+--------------------------
+Program:
+#include <stdio.h> 
+// Function to sort the numbers using pointers 
+void sort(int n, int* ptr) 
+{ 
+    int i, j, t; 
+    // Sort the numbers using pointers 
+    for (i = 0; i < n; i++) { 
+        for (j = i + 1; j < n; j++) { 
+            if (*(ptr + j) < *(ptr + i)) { 
+                t = *(ptr + i); 
+                *(ptr + i) = *(ptr + j); 
+                *(ptr + j) = t; 
+            } 
+        } 
+    } 
+    // print the numbers 
+    for (i = 0; i < n; i++) 
+        printf("%d ", *(ptr + i)); 
+} 
+// Driver code 
+int main() 
+{ 
+    int n = 5; 
+    int arr[] = { 0, 23, 14, 12, 9 }; 
+    sort(n, arr); 
+    return 0; 
+} 
+Output:
+0 9 12 14 23
+==========================================
+3. Given an array of positive numbers, find the maximum sum of a subsequence with the constraint that no 2 numbers in the sequence should be adjacent in the array. So 3 2 7 10 should return 13 (sum of 3 and 10) or 3 2 5 10 7 should return 15 (sum of 3, 5 and 7).
+
+Examples:
+Input :  arr[] = {3, 5, 3} 
+Output : 6 
+Explanation : 
+Selecting indexes 0 and 2 will maximise the sum 
+i.e 3+3 = 6
+
+Dynamic Programming Approach: Let’s decide the states of ‘dp’. Let dp[i] be the largest possible sum for the sub-array staring from index ‘i’ and ending at index ‘N-1’. Now, we have to find a recurrence relation between this state and a lower-order state.
+
+In this case for an index ‘i’, we will have two choices.
+
+1) Choose the current index:
+   In this case, the relation will be dp[i] = arr[i] + dp[i+2]
+2) Skip the current index:
+   Relation will be dp[i] = dp[i+1]
+We will choose the path that maximizes our result.
+Thus final relation will be:
+
+dp[i] = max(dp[i+2]+arr[i], dp[i+1])
+==========================================
+
+4. Sort an array without changing position of negative numbers
+Given an array arr[] of N integers, the task is to sort the array without changing the position of negative numbers (if any) i.e. the negative numbersneed not be sorted.
+Approach: Store all the non-negative elements of the array in another vector and sort this vector. Now, replace all the non-negative values in the original array with these sorted values.
+----------------------------------------------------------------
+#include <bits/stdc++.h> 
+using namespace std; 
+
+void sortArray(int a[], int n) 
+{ 
+	// Storing all non-negative values 
+	vector<int> ans; 
+	for (int i = 0; i < n; i++) { 
+		if (a[i] >= 0) 
+			ans.push_back(a[i]); 
+	} 
+	sort(ans.begin(), ans.end()); 
+	int j = 0; 
+	for (int i = 0; i < n; i++) { 
+		// If current element is non-negative then 
+		// update it such that all the 
+		// non-negative values are sorted 
+		if (a[i] >= 0) { 
+			a[i] = ans[j]; 
+			j++; 
+		} 
+	} 
+	// Print the sorted array 
+	for (int i = 0; i < n; i++) 
+		cout << a[i] << " "; 
+} 
+
+// Main functipm
+int main() 
+{ 
+	int arr[] = { 2, -7, -19, 8, 4, 1 }; 
+	int n = sizeof(arr) / sizeof(arr[0]); 
+	sortArray(arr, n); 
+	return 0; 
+} 
+Output 
+
+1 -7 -19 2 4 8
+======================================
+
+5. Create linked list from a given array
+Given an array arr[] of size N. The task is to create linked list from the given array.
+
+Examples:
+Input : arr[]={1, 2, 3, 4, 5}
+Output : 1->2->3->4->5
+
+Simple Approach: For each element of an array arr[] we create a node in a linked list and insert it at the end.
+
+======================================================================================================================

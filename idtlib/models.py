@@ -24,6 +24,23 @@ def create_mlp(DEBUG, dim, tag, act, regress=False):
         elif tag=="128-64":
             model.add(Dense(128, input_dim=dim, activation=act))
             model.add(Dense(64, activation=act))
+        elif tag=="64-32":
+            model.add(Dense(64, input_dim=dim, activation=act))
+            model.add(Dense(32, activation=act))
+        elif tag=="64-32-16":
+            model.add(Dense(64, input_dim=dim, activation=act))
+            model.add(Dense(32, activation=act))
+            model.add(Dense(16, activation=act))
+        elif tag=="64-32-16-8":
+            model.add(Dense(64, input_dim=dim, activation=act))
+            model.add(Dense(32, activation=act))
+            model.add(Dense(16, activation=act))
+            model.add(Dense(8, activation=act))
+        elif tag=="64-64-64-64":
+            model.add(Dense(64, input_dim=dim, activation=act))
+            model.add(Dense(64, activation=act))
+            model.add(Dense(64, activation=act))
+            model.add(Dense(64, activation=act))
         else:
             model.add(Dense(20, input_dim=dim, activation=act))
             model.add(Dense(20, activation=act))
