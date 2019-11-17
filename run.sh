@@ -11,7 +11,7 @@ do
     do
         for n in 8 16 32
         do
-            time python idt.py dataset 64-16 $act $m $n 
+            time python idt.py dataset 64-32 $act $m $n 
         done
     done
 done
