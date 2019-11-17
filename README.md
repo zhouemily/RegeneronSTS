@@ -1,6 +1,7 @@
 # RegeneronSTS
+  
 
-Project Introduction:
+# Project Introduction:
 
   Fuel combustion is a highly complicated process because it is affected by many physical and chemical
   factors that make the prediction and measurement of ignition delay time a complicated, slow, and 
@@ -18,7 +19,12 @@ Project Introduction:
   This project has significantly increased the capabilities of neural network models and the simulation tool, 
   which has wide applications in both rocket and Scramjet combustor designs. 
   
-How to Run the Artfifical Neural Network Tool:
+# How to Run the Artfifical Neural Network Tool:
+    *************************
+    Prerequisites;
+        a. Python (version 2.7 to python 3.6, python 3.7 is not supported)
+        b. Keras version 2.3.0
+    *************************
   1. download the tool from: https://github.com/zhouemily/RegeneronSTS
   2. cd the path where idt.py installed
   3. ./run.sh
