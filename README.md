@@ -1,4 +1,4 @@
-# RegeneronSTS
+# Synopsis 2020
   
 
 # Project Introduction:
